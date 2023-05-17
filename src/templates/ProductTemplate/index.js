@@ -10,6 +10,7 @@ export const query = graphql`
           description
           media {
             ... on ShopifyMediaImage {
+              id
               preview {
                 image {                 
                   src
@@ -17,6 +18,7 @@ export const query = graphql`
                     url
                     childImageSharp {
                       gatsbyImageData(width: 1000)
+                      id
                     }
                   }
                 }
@@ -36,8 +38,6 @@ export const query = graphql`
 
 export default function ProductTemplate(props) {
 
-    console.log('props', props.data.shopifyProduct.media[1].preview.image.localFile.childImageSharp.gatsbyImageData);
-    console.log('props2', props.data.shopifyProduct.featuredImage.localFile.childImageSharp.gatsbyImageData);
     return (
         <Layout>
             <Grid>

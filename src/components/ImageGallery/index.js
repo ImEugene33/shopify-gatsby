@@ -4,7 +4,7 @@ import { ImageGalleryWrapper } from "./styles";
 import ImageThumbnail from "./ImageThubnail";
 
 export function ImageGallery({ media }) {
-    
+
     const imagesArray = media.map((media) => {
         if (media.preview && media.preview.image && media.preview.image.localFile && media.preview.image.localFile.url) {
             return media.preview.image.localFile.childImageSharp.gatsbyImageData;
@@ -27,7 +27,7 @@ export function ImageGallery({ media }) {
             </div>
             <div>
                 {imagesArray.map((image, index) => {
-       
+
                     return (
                         <ImageThumbnail key={index} onClick={handleClick} image={image} isActive={activeImageThumbnail.images.fallback.src === image.images.fallback.src} alt="alt" />
                     )

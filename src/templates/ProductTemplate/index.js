@@ -2,17 +2,20 @@ import React from "react";
 import { graphql } from "gatsby";
 import { Layout, ImageGallery } from 'components';
 import {Grid} from './styles'
- 
+import CartContext from "../../context/CartContext";
+
 export const query = graphql`
-    query ProductQuery($shopifyId: String) {       
+    query ProductQuery($shopifyId: String) {
         shopifyProduct(shopifyId: {eq: $shopifyId}) {
+          shopifyId
+          id
           title
           description
           media {
             ... on ShopifyMediaImage {
               id
               preview {
-                image {                 
+                image {
                   src
                   localFile {
                     url
@@ -32,11 +35,21 @@ export const query = graphql`
               }
             }
           }
-        }           
+        }
     }
 `
 
 export default function ProductTemplate(props) {
+
+  const { getProductById } = React.useContext(CartContext)
+  console.log('getProductById', props.data.shopifyProduct.shopifyId);
+  console.log('CartContext', CartContext);
+
+  React.useEffect(() => {
+    getProductById(props.data.shopifyProduct.shopifyId).then(result => {
+      console.log('result', result);
+    })
+  }, [getProductById, props.data.shopifyProduct.shopifyId])
 
     return (
         <Layout>
@@ -44,13 +57,13 @@ export default function ProductTemplate(props) {
                 <div>
                     <h1>{props.data.shopifyProduct.title}</h1>
                     <p>{props.data.shopifyProduct.description}</p>
-                </div>               
+                </div>
                 {/* <div><ImageGallery featuredImage={props.data.shopifyProduct.featuredImage} /></div> */}
                 <div><ImageGallery media={props.data.shopifyProduct.media} /></div>
                 <div>
-                
+
                 </div>
-            </Grid>           
+            </Grid>
         </Layout>
     )
 }

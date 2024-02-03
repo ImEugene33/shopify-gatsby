@@ -2,13 +2,17 @@ import React, { useState } from 'react';
 import Client from 'shopify-buy';
 
 const client = Client.buildClient({
-  domain: `${process.env.GATSBY_SHOP_NAME}.myshopify.com`,
-  storefrontAccessToken: process.env.GATSBY_ACCESS_TOKEN,
+  domain: process.env.GATSBY_MYSHOPIFY_URL,
+  storefrontAccessToken: process.env.SHOPIFY_APP_PASSWORD,
 });
+
+console.log('client', client);
 
 const defaultState = {
   cart: {},
 };
+
+console.log('defaultState', defaultState);
 
 const CartContext = React.createContext(defaultState);
 export default CartContext;
@@ -27,6 +31,7 @@ export function CartContextProvider({ children }) {
     const getCheckout = async () => {
       if (checkoutId && typeof window !== 'undefined') {
         const fetchedCheckout = await client.checkout.fetch(checkoutId);
+
         if (fetchedCheckout.completedAt) {
           localStorage.removeItem('checkout');
           setCheckout(null);
@@ -41,10 +46,14 @@ export function CartContextProvider({ children }) {
     getCheckout();
   }, [setCheckout, setSuccessfulOrder, checkoutId]);
 
+  console.log('checkoutId', checkoutId);
+
+
   async function getProductById(productId) {
     const product = await client.product.fetch(productId);
     return product;
   }
+  console.log('product', getProductById());
 
   const updateLineItem = async ({ variantId, quantity }) => {
     // if no checkout id, create a new checkout
